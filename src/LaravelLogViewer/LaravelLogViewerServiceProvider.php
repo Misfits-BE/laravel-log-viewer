@@ -5,6 +5,15 @@ namespace Melihovv\LaravelLogViewer;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class LaravelLogViewerServiceProvider
+ * ----
+ * The class for registering the facade name form the package
+ * 
+ * @author  Tim Joosten        <https://github.com/tjoosten>
+ * @author  Alexander Melihovv <https://github.com/melihovv>
+ * @license MIT License        <https://github.com/Misfits-BE/laravel-log-viewer/blob/master/LICENSE>
+ */
 class LaravelLogViewerServiceProvider extends ServiceProvider
 {
     const CONFIG_PATH = __DIR__ . '/../config/laravel-log-viewer.php';
