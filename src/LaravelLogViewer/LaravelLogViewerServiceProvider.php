@@ -37,7 +37,7 @@ class LaravelLogViewerServiceProvider extends ServiceProvider
      * 
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(self::CONFIG_PATH, 'laravel-log-viewer');
 

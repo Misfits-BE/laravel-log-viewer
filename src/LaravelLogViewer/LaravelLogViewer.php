@@ -31,18 +31,10 @@ class LaravelLogViewer
      */
     protected $currentDir;
 
-    /**
-     * Current file.
-     *
-     * @var string
-     */
+    /** @var string $currentFile Current file */
     protected $currentFile;
 
-    /**
-     * Max file size.
-     *
-     * @var int
-     */
+    /** @var int $maxFileSize Max File size. */
     protected $maxFileSize;
 
     protected static $levelsClasses = [
@@ -68,13 +60,15 @@ class LaravelLogViewer
     ];
 
     /**
+     * LaravelLogViewer constructor 
+     * 
      * @param string $baseDir
      * @param int    $maxFileSize
      */
     public function __construct($baseDir, $maxFileSize)
     {
-        $this->baseDir = realpath($baseDir);
-        $this->currentDir = $this->baseDir;
+        $this->baseDir     = realpath($baseDir);
+        $this->currentDir  = $this->baseDir;
         $this->maxFileSize = $maxFileSize;
     }
 
@@ -144,19 +138,16 @@ class LaravelLogViewer
      *
      * @return array
      */
-    public function getCurrentDirectoryContent()
+    public function getCurrentDirectoryContent(): array
     {
         $content = File::glob($this->currentDir . DIRECTORY_SEPARATOR . '*');
 
-        $content = array_map(function ($item) {
+        $content = array_map(function ($item): object {
             return (object) [
-                'path' => $this->getPathRelativeToBaseDir($item),
-                'name' => Str::substr(
-                    $item,
-                    Str::length($this->currentDir) + 1
-                ),
+                'path'   => $this->getPathRelativeToBaseDir($item),
+                'name'   => Str::substr($item, Str::length($this->currentDir) + 1),
                 'isFile' => File::isFile($item),
-                'isDir' => File::isDirectory($item),
+                'isDir'  => File::isDirectory($item),
             ];
         }, $content);
 
@@ -164,19 +155,20 @@ class LaravelLogViewer
     }
 
     /**
+     * Get the base directory in the log viewer. 
+     * 
      * @return string
      */
-    public function getBaseDirectory()
+    public function getBaseDirectory(): string
     {
         return $this->baseDir;
     }
 
     /**
-     * @param string $baseDir
-     *
-     * @return $this
+     * @param  string $baseDir
+     * @return object $this
      */
-    public function setBaseDirectory($baseDir)
+    public function setBaseDirectory(string $baseDir): object
     {
         $this->baseDir = $baseDir;
 
@@ -188,49 +180,55 @@ class LaravelLogViewer
      *
      * @return string
      */
-    public function getCurrentDirectory()
+    public function getCurrentDirectory(): string
     {
         return $this->currentDir;
     }
 
     /**
+     * Get the current directory that is relative to the base directory.
+     * 
      * @return string
      */
-    public function getCurrentDirectoryRelativeToBaseDir()
+    public function getCurrentDirectoryRelativeToBaseDir(): string
     {
         return $this->getPathRelativeToBaseDir($this->currentDir);
     }
 
     /**
-     * @param string $directory Relative path to directory from base path.
+     * Set the current directory in the log viewer.
      *
      * @throws InvalidArgumentException
      *
-     * @return $this
+     * @param  string $directory Relative path to directory from base path.
+     * @return object $this
      */
-    public function setCurrentDirectory($directory)
+    public function setCurrentDirectory($directory): object
     {
         $directory = $this->normalizePath("$this->baseDir/$directory");
 
         $this->checkIfPathInBaseDir($directory);
-
         $this->currentDir = $directory;
 
         return $this;
     }
 
     /**
+     * Get the current file in the log viewer. 
+     * 
      * @return string
      */
-    public function getCurrentFile()
+    public function getCurrentFile(): string
     {
         return $this->currentFile;
     }
 
     /**
+     * Get the current file that is relative to the base directory. 
+     * 
      * @return string
      */
-    public function getCurrentFileRelativeToBaseDir()
+    public function getCurrentFileRelativeToBaseDir(): string
     {
         return $this->getPathRelativeToBaseDir($this->currentFile);
     }
@@ -238,23 +236,23 @@ class LaravelLogViewer
     /**
      * Returns relative path to base directory.
      *
-     * @param string $path Absolute path.
-     *
+     * @param  string $path Absolute path.
      * @return string
      */
-    protected function getPathRelativeToBaseDir($path)
+    protected function getPathRelativeToBaseDir(string $path): string
     {
         return Str::substr($path, Str::length($this->baseDir));
     }
 
     /**
-     * @param string $file Relative path to file from base directory.
-     *
+     * Set the current file in the log viewer. 
+     * 
      * @throws InvalidArgumentException
      *
-     * @return $this
+     * @param  string $file Relative path to file from base directory.
+     * @return object $this
      */
-    public function setCurrentFile($file)
+    public function setCurrentFile(string $file): object
     {
         $file = $this->normalizePath("$this->baseDir/$file");
 
@@ -270,13 +268,14 @@ class LaravelLogViewer
     /**
      * Checks if passed path is inside base directory.
      *
-     * @param string $path Absolute path.
-     *
      * @throws InvalidArgumentException
+     * 
+     * @param  string $path Absolute path.
+     * @return void
      */
-    protected function checkIfPathInBaseDir($path)
+    protected function checkIfPathInBaseDir(string $path): void
     {
-        if (!Str::startsWith($path, $this->baseDir)) {
+        if (! Str::startsWith($path, $this->baseDir)) {
             throw new InvalidArgumentException(
                 "Passed directory is not in base directory $this->baseDir"
             );
@@ -286,13 +285,12 @@ class LaravelLogViewer
     /**
      * Normalizes path.
      *
-     * @param string $path Absolute path.
-     *
      * @throws InvalidArgumentException
      *
+     * @param  string $path Absolute path.
      * @return string Normalized path.
      */
-    protected function normalizePath($path)
+    protected function normalizePath(string $path): string
     {
         $path = realpath($path);
 
@@ -308,14 +306,14 @@ class LaravelLogViewer
      *
      * @return string
      */
-    public function getRelativePathToCurrentDirectoryParent()
+    public function getRelativePathToCurrentDirectoryParent(): string
     {
         if ($this->baseDir === $this->currentDir) {
             return DIRECTORY_SEPARATOR;
         }
 
         $path = realpath($this->currentDir . DIRECTORY_SEPARATOR . '..');
-
+        
         return $this->getPathRelativeToBaseDir($path) ?: DIRECTORY_SEPARATOR;
     }
 
@@ -324,7 +322,7 @@ class LaravelLogViewer
      *
      * @return bool
      */
-    public function isCurrentDirectoryBase()
+    public function isCurrentDirectoryBase(): bool
     {
         return $this->currentDir === $this->baseDir;
     }
@@ -334,18 +332,18 @@ class LaravelLogViewer
      *
      * @return array
      */
-    public function getParentDirectories()
+    public function getParentDirectories(): array
     {
         if ($this->isCurrentDirectoryBase()) {
             return [];
         }
 
         $currentDir = $this->currentDir;
-        $dirs = [];
+        $dirs       = [];
+
         do {
-            $dir = dirname($currentDir);
-            $dirs[] = $this->getPathRelativeToBaseDir($dir)
-                ?: DIRECTORY_SEPARATOR;
+            $dir        = dirname($currentDir);
+            $dirs[]     = $this->getPathRelativeToBaseDir($dir) ?: DIRECTORY_SEPARATOR;
             $currentDir = $dir;
         } while ($dir !== $this->baseDir);
 

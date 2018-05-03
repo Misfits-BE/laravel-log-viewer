@@ -39,8 +39,7 @@ class LaravelLogViewerController
             'logs' => $viewer->getLogsFromCurrentFile(),
             'dirItems' => $viewer->getCurrentDirectoryContent(),
             'currentFile' => $viewer->getCurrentFileRelativeToBaseDir(),
-            'parentDirPath' =>
-                $viewer->getRelativePathToCurrentDirectoryParent(),
+            'parentDirPath' => $viewer->getRelativePathToCurrentDirectoryParent(),
             'isCurrentDirectoryBase' => $viewer->isCurrentDirectoryBase(),
             'parentDirs' => $viewer->getParentDirectories(),
         ]);
