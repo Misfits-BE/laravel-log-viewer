@@ -2,6 +2,7 @@
 
 namespace Melihovv\LaravelLogViewer;
 
+use Route;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,6 +31,14 @@ class LaravelLogViewerServiceProvider extends ServiceProvider
 
         $this->publishes([self::CONFIG_PATH => config_path('laravel-log-viewer.php')], 'config');
         $this->publishes([self::VIEWS_PATH  => resource_path('views/vendor/laravel-log-viewer')], 'views');
+
+        if (config('laravel-log-viewer.debug_only', true) && empty('app.debug')) {
+            return;
+        }
+
+        // Register the route for the logs view. 
+        Route::get(config('laravel-log-viewer.url', 'Melihovv\LaravelLogViewer\LaravelLogViewerController@index'))
+            ->name('log.viewer.index');
     }
 
     /**

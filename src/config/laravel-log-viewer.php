@@ -21,4 +21,18 @@ return [
 
     'max_file_size' => 10 * 1024 ** 2, // 10 mb.
 
+    /**
+     * ---------------------------------------------------------------------------
+     * Url route for the log viewer. 
+     * ---------------------------------------------------------------------------
+     */
+
+    'url' => 'logs',
+
+    /**
+     * Indicates whether to enable laravel log viewer only when debug is enabled (APP_DEBUG).
+     */
+
+    'debug_only' => true,
+
 ];
