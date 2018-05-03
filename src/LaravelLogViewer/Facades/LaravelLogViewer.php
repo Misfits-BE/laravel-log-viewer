@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Facade;
  */
 class LaravelLogViewer extends Facade
 {
+    /**
+     * Method for registering the facade for the package. 
+     * 
+     * @return string
+     */
     protected static function getFacadeAccessor()
     {
         return 'log-viewer';
